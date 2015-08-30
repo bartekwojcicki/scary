@@ -77,7 +77,7 @@ class TrainingSetBuilder:
 
     @property
     def functions(self):
-        return self.functions_fetcher.fetch()
+        return self.functions_fetcher.fetch_unique()
 
     def get_features(self, functions):
         return self.features_fetcher.fetch(functions)

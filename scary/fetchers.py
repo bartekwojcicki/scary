@@ -15,6 +15,14 @@ class FunctionsFetcher:
         self.to_revision = to_revision
         self.files_fetcher = files_fetcher
 
+    def fetch_unique(self):
+        functions_dict = {}
+        for function in self.fetch():
+            function_key = (function.name, function.file)
+            if function_key not in functions_dict:
+                functions_dict[function_key] = function
+        return list(functions_dict.values())
+
     def fetch(self):
         functions = self.get_functions_for_revision(self.from_revision)
         if self.to_revision:
@@ -128,13 +136,13 @@ class FeaturesFetcher:
     @staticmethod
     def get_features_by_functions(features):
         return {
-            (feature.function_name, feature.file): feature.features
+            (feature.function_name, feature.file, feature.lineno): feature.features
             for feature in features
         }
 
     @staticmethod
     def get_features_for_function(features_dict, function):
-        return features_dict[(function.name, function.file)]
+        return features_dict[(function.name, function.file, function.lineno)]
 
 
 class FeaturesVisitor(visitors.CodeVisitor):
@@ -167,13 +175,13 @@ class FeaturesVisitor(visitors.CodeVisitor):
             complexity_visitor.functions_complexity,
             complexity_visitor.classes_complexity,
         ]
-        self.features.append(Feature(node.name, self.file, features))
+        self.features.append(Feature(node.name, self.file, node.lineno, features))
         for child in node.body:
             self.visit(child)
 
 
 Feature = collections.namedtuple(
-    'Feature', ['function_name', 'file', 'features'])
+    'Feature', ['function_name', 'file', 'lineno', 'features'])
 
 
 def get_code(*, git, revision, file):

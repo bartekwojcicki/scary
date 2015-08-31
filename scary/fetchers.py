@@ -89,6 +89,21 @@ class FilesFetcher:
                 yield file
 
 
+class ModifiedFilesFetcher(FilesFetcher):
+    def __init__(self, *, repository, from_revision, to_revision):
+        super().__init__(repository=repository, revision=from_revision)
+        self.to_revision = to_revision
+
+    @property
+    def all_files(self):
+        files_with_status_string = self.git.diff(
+            '--name-status', self.revision, self.to_revision)
+        for file_with_status in files_with_status_string.split('\n'):
+            status, file = file_with_status.split()
+            if status == 'M':
+                yield file
+
+
 class FunctionsVisitor(visitors.CodeVisitor):
     def __init__(self, file=''):
         self.functions = []

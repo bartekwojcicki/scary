@@ -87,8 +87,10 @@ class TrainingSetBuilder:
 
     @classmethod
     def build_training_set(cls, repository, from_revision, to_revision):
-        files_fetcher = scary.fetchers.FilesFetcher(
-            repository=repository, revision=from_revision)
+        files_fetcher = scary.fetchers.ModifiedFilesFetcher(
+            repository=repository,
+            from_revision=from_revision,
+            to_revision=to_revision)
         functions_fetcher = scary.fetchers.FunctionsFetcher(
             repository=repository,
             from_revision=from_revision,

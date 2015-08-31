@@ -83,9 +83,7 @@ class FilesFetcher:
     @staticmethod
     def filter_files(files):
         for file in files:
-            if (file.endswith('.py') and
-                    'tests' not in file and
-                    'docs' not in file):
+            if file.endswith('.py') and 'docs' not in file:
                 yield file
 
 

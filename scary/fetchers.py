@@ -44,7 +44,7 @@ class FunctionsFetcher:
                 git=self.repository.git, revision=revision, file=file)
             visitor = FunctionsVisitor.from_code(code, file=file)
             yield from visitor.functions
-        except git.exc.GitCommandError:
+        except (git.exc.GitCommandError, SyntaxError):
             pass
 
     def filter_functions(self, functions):

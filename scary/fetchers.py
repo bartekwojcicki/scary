@@ -98,9 +98,13 @@ class ModifiedFilesFetcher(FilesFetcher):
         files_with_status_string = self.git.diff(
             '--name-status', self.revision, self.to_revision)
         for file_with_status in files_with_status_string.split('\n'):
-            status, file = file_with_status.split()
-            if status == 'M':
-                yield file
+            try:
+                status, file = file_with_status.split()
+                if status == 'M':
+                    yield file
+            except ValueError:
+                # Ignoring filenames with whitespace
+                pass
 
 
 class FunctionsVisitor(visitors.CodeVisitor):

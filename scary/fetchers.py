@@ -1,4 +1,5 @@
 import collections
+import math
 
 import git
 import numpy as np
@@ -159,10 +160,11 @@ class FeaturesFetcher:
 
 
 class FeaturesVisitor(visitors.CodeVisitor):
-    def __init__(self, file='', code_lines=[]):
+    def __init__(self, file='', code_lines=[], log_halstead=True):
         self.features = []
         self.file = file
         self.code_lines = code_lines
+        self.log_halstead = log_halstead
 
     def visit_FunctionDef(self, node):
         complexity_visitor = visitors.ComplexityVisitor.from_ast(node)
@@ -171,26 +173,47 @@ class FeaturesVisitor(visitors.CodeVisitor):
         halstead_metrics = halstead.HalsteadMetricsCollector().try_collect(
             self.code_lines, start_line, end_line)
         features = [
-            halstead_metrics.h1,
-            halstead_metrics.h2,
-            halstead_metrics.N1,
-            halstead_metrics.N2,
-            halstead_metrics.vocabulary,
-            halstead_metrics.length,
-            halstead_metrics.calculated_length,
-            halstead_metrics.volume,
-            halstead_metrics.difficulty,
-            halstead_metrics.effort,
-            halstead_metrics.time,
-            halstead_metrics.bugs,
-            complexity_visitor.total_complexity,
-            complexity_visitor.complexity,
-            complexity_visitor.functions_complexity,
-            complexity_visitor.classes_complexity,
+            complexity_visitor.functions[0].complexity,
         ]
+        if self.log_halstead:
+            features.extend([
+                log(halstead_metrics.h1),
+                log(halstead_metrics.h2),
+                log(halstead_metrics.N1),
+                log(halstead_metrics.N2),
+                log(halstead_metrics.vocabulary),
+                log(halstead_metrics.length),
+                log(halstead_metrics.calculated_length),
+                log(halstead_metrics.volume),
+                log(halstead_metrics.difficulty),
+                log(halstead_metrics.effort),
+                log(halstead_metrics.time),
+                log(halstead_metrics.bugs),
+            ])
+        else:
+            features.extend([
+                halstead_metrics.h1,
+                halstead_metrics.h2,
+                halstead_metrics.N1,
+                halstead_metrics.N2,
+                halstead_metrics.vocabulary,
+                halstead_metrics.length,
+                halstead_metrics.calculated_length,
+                halstead_metrics.volume,
+                halstead_metrics.difficulty,
+                halstead_metrics.effort,
+                halstead_metrics.time,
+                halstead_metrics.bugs,
+            ])
         self.features.append(Feature(node.name, self.file, node.lineno, features))
         for child in node.body:
             self.visit(child)
+
+def log(value):
+    if value == 0:
+        return math.log(0.001)
+    else:
+        return math.log2(value)
 
 
 Feature = collections.namedtuple(

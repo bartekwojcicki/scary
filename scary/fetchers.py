@@ -5,7 +5,7 @@ import git
 import numpy as np
 from radon import visitors
 
-from scary import halstead
+from . import halstead
 
 
 class FunctionsFetcher:
@@ -212,6 +212,7 @@ class FeaturesVisitor(visitors.CodeVisitor):
         self.features.append(Feature(node.name, self.file, node.lineno, features))
         for child in node.body:
             self.visit(child)
+
 
 def log(value):
     if value == 0:

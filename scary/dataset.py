@@ -1,4 +1,4 @@
-import scary.fetchers
+from . import fetchers
 
 
 class PredictingSet:
@@ -28,13 +28,13 @@ class PredictingSetBuilder:
 
     @classmethod
     def build_predicting_set(cls, repository, revision):
-        files_fetcher = scary.fetchers.FilesFetcher(
+        files_fetcher = fetchers.FilesFetcher(
             repository=repository, revision=revision)
-        functions_fetcher = scary.fetchers.FunctionsFetcher(
+        functions_fetcher = fetchers.FunctionsFetcher(
             repository=repository,
             from_revision=revision,
             files_fetcher=files_fetcher)
-        features_fetcher = scary.fetchers.FeaturesFetcher(
+        features_fetcher = fetchers.FeaturesFetcher(
             repository=repository,
             revision=revision)
         builder = cls(
@@ -87,19 +87,19 @@ class TrainingSetBuilder:
 
     @classmethod
     def build_training_set(cls, repository, from_revision, to_revision):
-        files_fetcher = scary.fetchers.ModifiedFilesFetcher(
+        files_fetcher = fetchers.ModifiedFilesFetcher(
             repository=repository,
             from_revision=from_revision,
             to_revision=to_revision)
-        functions_fetcher = scary.fetchers.FunctionsFetcher(
+        functions_fetcher = fetchers.FunctionsFetcher(
             repository=repository,
             from_revision=from_revision,
             to_revision=to_revision,
             files_fetcher=files_fetcher)
-        features_fetcher = scary.fetchers.FeaturesFetcher(
+        features_fetcher = fetchers.FeaturesFetcher(
             repository=repository,
             revision=from_revision)
-        classes_fetcher = scary.fetchers.ClassesFetcher(
+        classes_fetcher = fetchers.ClassesFetcher(
             repository=repository,
             from_revision=from_revision,
             to_revision=to_revision)

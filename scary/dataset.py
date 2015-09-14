@@ -50,13 +50,6 @@ class TrainingSet:
         self.features = features
         self.classes = classes
 
-    def save(self, filename):
-        pass
-
-    @classmethod
-    def from_file(cls, filename):
-        pass
-
 
 class TrainingSetBuilder:
     def __init__(self, *, repository, functions_fetcher, features_fetcher,

@@ -59,6 +59,16 @@ class FunctionsFetcher:
         return {(function.name, function.file) for function in functions}
 
 
+class UniqueFunctionsFetcher(FunctionsFetcher):
+    def fetch(self):
+        functions_dict = {}
+        for function in super().fetch():
+            function_key = (function.name, function.file)
+            if function_key not in functions_dict:
+                functions_dict[function_key] = function
+        return list(functions_dict.values())
+
+
 class FilesFetcher:
     def __init__(self, *, repository, revision):
         self.repository = repository

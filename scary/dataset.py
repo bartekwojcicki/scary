@@ -70,7 +70,7 @@ class TrainingSetBuilder:
 
     @property
     def functions(self):
-        return self.functions_fetcher.fetch_unique()
+        return self.functions_fetcher.fetch()
 
     def get_features(self, functions):
         return self.features_fetcher.fetch(functions)
@@ -84,7 +84,7 @@ class TrainingSetBuilder:
             repository=repository,
             from_revision=from_revision,
             to_revision=to_revision)
-        functions_fetcher = fetchers.FunctionsFetcher(
+        functions_fetcher = fetchers.UniqueFunctionsFetcher(
             repository=repository,
             from_revision=from_revision,
             to_revision=to_revision,

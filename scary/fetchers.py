@@ -191,18 +191,18 @@ class FeaturesVisitor(visitors.CodeVisitor):
         ]
         if self.log_halstead:
             features.extend([
-                log(halstead_metrics.h1),
-                log(halstead_metrics.h2),
-                log(halstead_metrics.N1),
-                log(halstead_metrics.N2),
-                log(halstead_metrics.vocabulary),
-                log(halstead_metrics.length),
-                log(halstead_metrics.calculated_length),
-                log(halstead_metrics.volume),
-                log(halstead_metrics.difficulty),
-                log(halstead_metrics.effort),
-                log(halstead_metrics.time),
-                log(halstead_metrics.bugs),
+                log_filter(halstead_metrics.h1),
+                log_filter(halstead_metrics.h2),
+                log_filter(halstead_metrics.N1),
+                log_filter(halstead_metrics.N2),
+                log_filter(halstead_metrics.vocabulary),
+                log_filter(halstead_metrics.length),
+                log_filter(halstead_metrics.calculated_length),
+                log_filter(halstead_metrics.volume),
+                log_filter(halstead_metrics.difficulty),
+                log_filter(halstead_metrics.effort),
+                log_filter(halstead_metrics.time),
+                log_filter(halstead_metrics.bugs),
             ])
         else:
             features.extend([
@@ -224,7 +224,7 @@ class FeaturesVisitor(visitors.CodeVisitor):
             self.visit(child)
 
 
-def log(value):
+def log_filter(value):
     if value == 0:
         return math.log(0.001)
     else:

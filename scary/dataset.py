@@ -1,10 +1,10 @@
+import collections
+
 from . import fetchers
 
 
-class PredictingSet:
-    def __init__(self, *, functions, features):
-        self.functions = functions
-        self.features = features
+PredictingSet = collections.namedtuple(
+    'PredictingSet', ['functions', 'features'])
 
 
 class PredictingSetBuilder:
@@ -44,11 +44,8 @@ class PredictingSetBuilder:
         return builder.build()
 
 
-class TrainingSet:
-    def __init__(self, *, functions, features, classes):
-        self.functions = functions
-        self.features = features
-        self.classes = classes
+TrainingSet = collections.namedtuple(
+    'TrainingSet', ['functions', 'features', 'classes'])
 
 
 class TrainingSetBuilder:

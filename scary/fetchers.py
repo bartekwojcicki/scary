@@ -219,7 +219,7 @@ class FeaturesVisitor(visitors.CodeVisitor):
                 halstead_metrics.time,
                 halstead_metrics.bugs,
             ])
-        self.features.append(Feature(node.name, self.file, node.lineno, features))
+        self.features.append(FeatureVector(node.name, self.file, node.lineno, features))
         for child in node.body:
             self.visit(child)
 
@@ -231,8 +231,8 @@ def log_filter(value):
         return math.log2(value)
 
 
-Feature = collections.namedtuple(
-    'Feature', ['function_name', 'file', 'lineno', 'features'])
+FeatureVector = collections.namedtuple(
+    'FeatureVector', ['function_name', 'file', 'lineno', 'features'])
 
 
 def get_code(*, git, revision, file):
